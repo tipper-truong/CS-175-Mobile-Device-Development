@@ -134,10 +134,6 @@ public class NewDishActivity extends AppCompatActivity {
                 for (int i = 0; i < ingredientsList.size(); i++) {
                     if(!ingredientsList.get(i).getText().toString().isEmpty()) {
                         ingredientsStrList.add(ingredientsList.get(i).getText().toString());
-                    } else {
-                        Toast toast = Toast.makeText(newDishContext, "Empty list of ingredients, please enter ingredients", Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.TOP, 0, 0);
-                        toast.show();
                     }
                 }
                 EditText recipeName = (EditText) (findViewById(R.id.recipe_editText));

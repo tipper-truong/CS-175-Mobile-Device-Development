@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tipper.whatsfordinner.MainActivity"
+    android:id="@+id/constraintLayout"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
+
+    <ImageView
+        android:id="@+id/whatsfordinner_bannerImageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/whats_dinner_banner"
+        tools:ignore="MissingConstraints"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/meals_imageView"
+        android:layout_width="100dp"
+        android:layout_height="105dp"
+        android:layout_marginBottom="44dp"
+        android:layout_marginLeft="47dp"
+        android:layout_marginStart="47dp"
+        app:layout_constraintBottom_toTopOf="@+id/groceries_imageView"
+        app:layout_constraintLeft_toLeftOf="@+id/whatsfordinner_bannerImageView"
+        app:srcCompat="@drawable/meal_icon"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1" />
+
+    <ImageView
+        android:id="@+id/recipes_imageView"
+        android:layout_width="100dp"
+        android:layout_height="105dp"
+        app:srcCompat="@drawable/recipes_icon"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/addDish_imagesView"
+        android:layout_marginStart="68dp"
+        android:layout_marginEnd="69dp"
+        app:layout_constraintRight_toRightOf="@+id/whatsfordinner_bannerImageView"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintLeft_toRightOf="@+id/meals_imageView"
+        android:layout_marginLeft="68dp"
+        android:layout_marginRight="69dp" />
+
+    <ImageView
+        android:id="@+id/groceries_imageView"
+        android:layout_width="100dp"
+        android:layout_height="105dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addDish_imagesView"
+        app:layout_constraintLeft_toLeftOf="@+id/meals_imageView"
+        app:layout_constraintRight_toRightOf="@+id/meals_imageView"
+        app:layout_constraintTop_toTopOf="@+id/addDish_imagesView"
+        app:srcCompat="@drawable/groceries_icon"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+    <ImageView
+        android:id="@+id/addDish_imagesView"
+        android:layout_width="100dp"
+        android:layout_height="105dp"
+        android:layout_marginBottom="41dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addDish_textView"
+        app:layout_constraintLeft_toLeftOf="@+id/recipes_imageView"
+        app:layout_constraintRight_toRightOf="@+id/recipes_imageView"
+        app:layout_constraintTop_toTopOf="@+id/recipes_textView"
+        app:srcCompat="@drawable/add_dish_icon"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+    <TextView
+        android:id="@+id/meals_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Meals"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginEnd="22dp"
+        app:layout_constraintRight_toRightOf="@+id/meals_imageView"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/meals_imageView"
+        android:layout_marginRight="22dp" />
+
+    <TextView
+        android:id="@+id/recipes_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipes"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="13dp"
+        app:layout_constraintRight_toRightOf="@+id/recipes_imageView"
+        android:layout_marginBottom="207dp"
+        android:layout_marginRight="28dp" />
+
+    <TextView
+        android:id="@+id/groceries_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Groceries"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/groceries_imageView"
+        android:layout_marginTop="17dp"
+        app:layout_constraintTop_toBottomOf="@+id/groceries_imageView" />
+
+    <TextView
+        android:id="@+id/addDish_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Dish"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintRight_toRightOf="@+id/addDish_imagesView"
+        android:layout_marginBottom="41dp"
+        android:layout_marginRight="5dp" />
+
+
+
+</android.support.constraint.ConstraintLayout>
+
+

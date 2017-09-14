@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WhatsForDinner</string>
+    <string name="title_activity_new_dish">NewDishActivity</string>
+    <string name="banner_text">Author: Tipper Truong\nVersion Number: 1.0.0\nCopyright &#169; TRUTIPZ MD Corporation</string>
+</resources>

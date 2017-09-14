@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_newdish_layout"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/recipe_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Recipe Name"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/addIngredients_textView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:id="@+id/scrollView3">
+
+
+                <LinearLayout
+                    android:id="@+id/ingredients_linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+
+                    <EditText
+                        android:id="@+id/recipe_textArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:maxLength="250"
+                        android:hint="Enter recipe description" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Add Ingredients + "
+        android:textStyle="bold"
+        android:textColor="#696969"
+        android:textSize="19sp"
+        android:layout_marginTop="91dp"
+        android:id="@+id/addIngredients_textView"
+        android:layout_below="@+id/recipe_editText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp" />
+
+    <TextView
+        android:id="@+id/submit_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit Recipe"
+        android:textStyle="bold"
+        android:textColor="#696969"
+        android:textSize="19sp"
+        android:layout_above="@+id/scrollView3"
+        android:layout_toRightOf="@+id/addIngredients_textView"
+        android:layout_toEndOf="@+id/addIngredients_textView"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp" />
+
+    <ImageView
+        android:id="@+id/setFoodImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignLeft="@+id/addIngredients_textView"
+        android:layout_alignStart="@+id/addIngredients_textView"
+        android:layout_below="@+id/recipe_editText"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="17dp"
+        app:srcCompat="@drawable/meal_icon" />
+
+    <ImageView
+        android:id="@+id/uploadImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="13dp"
+        app:srcCompat="@drawable/add_dish_icon"
+        android:layout_alignTop="@+id/setFoodImage"
+        android:layout_alignRight="@+id/submit_textView"
+        android:layout_alignEnd="@+id/submit_textView"
+        android:layout_marginRight="51dp"
+        android:layout_marginEnd="51dp" />
+
+</RelativeLayout>

@@ -55,7 +55,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_INGREDIENT_TABLE = "CREATE TABLE " + TABLE_INGREDIENTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_INGREDIENTS_NAME + " TEXT,"
-                +  "UNIQUE (" + KEY_INGREDIENTS_NAME + ") ON CONFLICT ROLLBACK)";
+                +  "UNIQUE (" + KEY_INGREDIENTS_NAME + ") ON CONFLICT ROLLBACK)"; //helps avoid duplicates
 
         String CREATE_RECIPE_TABLE = "CREATE TABLE " + TABLE_RECIPES + "("
                         + KEY_ID + " INTEGER PRIMARY KEY,"

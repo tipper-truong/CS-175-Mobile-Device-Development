@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.Image;
 import android.os.Build;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private PopupWindow mPopupWindow;
     private ImageView whatsdinnerBannerImage;
     private ImageView addDishImage;
+    private ImageView recipeImage;
     private TextView addDishText;
+    private TextView recipeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,28 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //RECIPE NEEDS WORK
+        recipeText = (TextView) findViewById(R.id.recipes_textView);
+        recipeImage = (ImageView) findViewById(R.id.recipes_imageView);
+
+        recipeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RecipeListActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        recipeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RecipeListActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
     }

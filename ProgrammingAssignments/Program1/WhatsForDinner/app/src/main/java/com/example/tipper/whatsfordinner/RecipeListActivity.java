@@ -93,10 +93,21 @@ public class RecipeListActivity extends AppCompatActivity {
             holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
 
+            if(mTwoPane) {
+                Bundle arguments = new Bundle();
+                arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                RecipeDetailFragment fragment = new RecipeDetailFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.recipe_detail_container, fragment)
+                        .commit();
+            }
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
+
                         Bundle arguments = new Bundle();
                         arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.id);
                         RecipeDetailFragment fragment = new RecipeDetailFragment();

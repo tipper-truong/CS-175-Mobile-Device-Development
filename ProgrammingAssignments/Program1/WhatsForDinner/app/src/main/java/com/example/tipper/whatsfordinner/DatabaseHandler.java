@@ -43,6 +43,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Ingredient Table Column names
     private static final String KEY_INGREDIENTS_NAME = "ingredients";
 
+    //Meal table name
+    private static final String TABLE_MEALS = "Meal";
+
+    //Meal Table Column names
+    private static final String KEY_MEAL_NAME = "meal";
+    private static final String KEY_MEAL_COUNT = "meal_count";
+
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,15 +64,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_INGREDIENTS_NAME + " TEXT,"
                 +  "UNIQUE (" + KEY_INGREDIENTS_NAME + ") ON CONFLICT ROLLBACK)"; //helps avoid duplicates
 
+        String CREATE_MEAL_TABLE = "CREATE TABLE " + TABLE_MEALS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_MEAL_NAME + " TEXT,"
+                + KEY_MEAL_COUNT + " INTEGER )"; //helps avoid duplicates
+
         String CREATE_RECIPE_TABLE = "CREATE TABLE " + TABLE_RECIPES + "("
                         + KEY_ID + " INTEGER PRIMARY KEY,"
                         + KEY_NAME + " TEXT,"
                         + KEY_INGREDIENTS + " TEXT, "
                         + KEY_IMAGE_PATH + " TEXT, "
                         + KEY_DESCRIPTION + " TEXT, "
-                        +  "UNIQUE (" + KEY_NAME  + ") ON CONFLICT ROLLBACK)"; //helps avoid duplicates
+                        +  "UNIQUE (" + KEY_NAME  + ") ON CONFLICT ROLLBACK )"; //helps avoid duplicates
 
         db.execSQL(CREATE_INGREDIENT_TABLE);
+        db.execSQL(CREATE_MEAL_TABLE);
         db.execSQL(CREATE_RECIPE_TABLE);
     }
 

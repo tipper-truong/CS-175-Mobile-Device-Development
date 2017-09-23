@@ -1,15 +1,23 @@
 package com.example.tipper.whatsfordinner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tipper.whatsfordinner.recipe.RecipeContent;
+import com.squareup.picasso.Picasso;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * A fragment representing a single Recipe detail screen.
@@ -51,7 +59,7 @@ public class RecipeDetailFragment extends Fragment {
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mItem.recipeName);
             }
         }
     }
@@ -60,10 +68,45 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
+        RecipeContent.setContext(rootView.getContext());
 
-        // Show the dummy content as text in a TextView.
+        // Initialize Relative Layout for Recipe Detail XML
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.recipe_detail)).setText(mItem.details);
+            //((TextView) rootView.findViewById(R.id.recipe_detail)).setText(mItem.recipeDetails);
+            //RelativeLayout rl = rootView.findViewById(R.id.recipe_detail_rl);
+            TextView recipeName = (TextView) rootView.findViewById(R.id.recipe_name_detail);
+            TextView recipeIngredients = (TextView) rootView.findViewById(R.id.recipe_ingredients_detail);
+            ImageView recipeImage = (ImageView) rootView.findViewById(R.id.recipe_image_detail);
+            TextView recipeDescription = (TextView) rootView.findViewById(R.id.recipe_description__detail);
+            recipeName.setText(mItem.recipeName); //set recipe name
+            for (String r : mItem.recipeIngredients) {
+                recipeIngredients.append(r + " \n"); // set recipe ingredients
+            }
+
+            String imagePath = mItem.recipeImagePath; //set recipe image
+            if (URLUtil.isValidUrl(imagePath)) {
+                // It's a URL
+                try {
+                    URL url = new URL(imagePath);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    Picasso.with(rootView.getContext()).load(imagePath).into(recipeImage);
+                    urlConnection.disconnect(); //avoid any response leakage
+                } catch(java.io.IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Else: it's a drawable resource ID or from GalleryView
+                GalleryImageAdapter galleryImageAdapter= new GalleryImageAdapter(rootView.getContext());
+
+                if (!imagePath.equals("2130837599")) { //default image id
+                    recipeImage.setImageResource(galleryImageAdapter.mImageIds[Integer.parseInt(imagePath)]);
+                } else  {
+                    //else set default image
+                    recipeImage.setImageResource(Integer.valueOf(imagePath));
+                }
+            }
+            recipeDescription.setText(mItem.recipeDetails);
+
         }
 
         return rootView;

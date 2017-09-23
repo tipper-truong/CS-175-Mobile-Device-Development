@@ -9,13 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
 
 
 import com.example.tipper.whatsfordinner.recipe.RecipeContent;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -41,6 +51,7 @@ public class RecipeListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_list);
 
         RecipeContent.setContext(getApplicationContext());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -90,12 +101,36 @@ public class RecipeListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            //holder.mIdView.setText(mValues.get(position).id);
+            holder.mRecipeNameView.setText(mValues.get(position).recipeName); //recipe name
+
+           /* ArrayList<String> recipeList = mValues.get(position).recipeIngredients; //recipe ingredients
+            for (String r: recipeList) {
+                holder.mRecipeIngredientsView.setText(r); //displaying all the recipe ingredients
+            }
+
+            String imagePath = mValues.get(position).recipeImagePath;
+            Log.v("Image Path", imagePath);
+            if(URLUtil.isValidUrl(imagePath)) { //recipe image path
+                // It's a URL
+                try {
+                    URL url = new URL(imagePath);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    Picasso.with(getApplicationContext()).load(imagePath).into(holder.mRecipeImageView);
+                    urlConnection.disconnect(); //avoid any response leakage
+                } catch(java.io.IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Else: it's a drawable resource ID
+                holder.mRecipeImageView.setImageResource(Integer.valueOf(imagePath));
+            }
+            holder.mRecipeDescriptionView.setText(mValues.get(position).recipeDetails); */
+
 
             if(mTwoPane) {
                 Bundle arguments = new Bundle();
-                arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.recipeName);
                 RecipeDetailFragment fragment = new RecipeDetailFragment();
                 fragment.setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
@@ -109,7 +144,7 @@ public class RecipeListActivity extends AppCompatActivity {
                     if (mTwoPane) {
 
                         Bundle arguments = new Bundle();
-                        arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.recipeName);
                         RecipeDetailFragment fragment = new RecipeDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -118,7 +153,7 @@ public class RecipeListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, RecipeDetailActivity.class);
-                        intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.recipeName);
 
                         context.startActivity(intent);
                     }
@@ -133,20 +168,26 @@ public class RecipeListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            //public final TextView mIdView;
+            public final TextView mRecipeNameView;
+            public final TextView mRecipeIngredientsView;
+            public final ImageView mRecipeImageView;
+            public final TextView mRecipeDescriptionView;
             public RecipeContent.RecipeItem mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                //mIdView = (TextView) view.findViewById(R.id.id);
+                mRecipeNameView = (TextView) view.findViewById(R.id.recipe_name);
+                mRecipeIngredientsView = (TextView) view.findViewById(R.id.recipe_ingredients_detail);
+                mRecipeImageView = (ImageView) view.findViewById(R.id.recipe_image_detail);
+                mRecipeDescriptionView = (TextView) view.findViewById(R.id.recipe_description__detail);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mRecipeNameView.getText() + "'";
             }
         }
     }

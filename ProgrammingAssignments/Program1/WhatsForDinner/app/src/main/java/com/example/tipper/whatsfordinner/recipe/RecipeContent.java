@@ -41,13 +41,28 @@ public class RecipeContent {
 
     public static void setContext(Context c)
     {
+        ITEMS.clear(); //reset data structure
+        ITEM_MAP.clear(); // reset data structure
         if(db == null) { db = new DatabaseHandler(c).getWritableDatabase(); }
         if(db.isOpen()) {
             DatabaseHandler database = new DatabaseHandler(c);
             ArrayList<Recipe> recipeList = database.getAllRecipes();
 
             for (Recipe recipe : recipeList) {
-                RecipeItem item = new RecipeItem(String.valueOf(recipe.getID()), recipe.getName(), recipe.getDescription());
+                //RecipeItem item = new RecipeItem(String.valueOf(recipe.getID()), recipe.getName(), recipe.getDescription());
+                RecipeItem item = new RecipeItem(recipe.getName(), recipe.getIngredients(), recipe.getImagePath(), recipe.getDescription());
+                addItem(item);
+            }
+            database.close();
+            db.close();
+        } else {
+            db = new DatabaseHandler(c).getWritableDatabase();
+            DatabaseHandler database = new DatabaseHandler(c);
+            ArrayList<Recipe> recipeList = database.getAllRecipes();
+
+            for (Recipe recipe : recipeList) {
+                //RecipeItem item = new RecipeItem(String.valueOf(recipe.getID()), recipe.getName(), recipe.getDescription());
+                RecipeItem item = new RecipeItem(recipe.getName(), recipe.getIngredients(), recipe.getImagePath(), recipe.getDescription());
                 addItem(item);
             }
             database.close();
@@ -57,13 +72,17 @@ public class RecipeContent {
 
 
     private static void addItem(RecipeItem item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+        if(!ITEMS.contains(item) && !ITEM_MAP.containsKey(item.recipeName)) {
+            ITEMS.add(item);
+            ITEM_MAP.put(item.recipeName, item);
+        }
     }
 
-    private static RecipeItem createRecipeItem(int position) {
-        return new RecipeItem(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
+    /*private static RecipeItem createRecipeItem(int position) {
+        //return new RecipeItem(String.valueOf(position), "Item " + position, makeDetails(position));
+        return null;
+        //return new RecipeItem(recipe.getName(), recipe.getIngredients(), recipe.getImagePath(), recipe.getDescription());
+    }*/
 
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();
@@ -78,19 +97,27 @@ public class RecipeContent {
      * A dummy item representing a piece of content.
      */
     public static class RecipeItem {
-        public final String id;
-        public final String content;
-        public final String details;
+        //public final String id;
+        //public final String content;
+        //public final String details;
+        public final String recipeName;
+        public final ArrayList<String> recipeIngredients;
+        public final String recipeImagePath;
+        public final String recipeDetails;
 
-        public RecipeItem(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
+        public RecipeItem(String recipeName, ArrayList<String> recipeIngredients, String recipeImagePath, String recipeDetails) {
+            this.recipeName = recipeName;
+            this.recipeImagePath = recipeImagePath;
+            this.recipeIngredients = recipeIngredients;
+            this.recipeDetails = recipeDetails;
+            //this.id = id;
+            //this.content = content;
+            //this.details = details;
         }
 
         @Override
         public String toString() {
-            return content;
+            return recipeName;
         }
     }
 }

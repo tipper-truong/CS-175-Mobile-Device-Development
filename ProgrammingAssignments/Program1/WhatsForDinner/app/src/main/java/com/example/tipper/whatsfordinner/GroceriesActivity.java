@@ -149,8 +149,7 @@ public class GroceriesActivity extends AppCompatActivity {
             grocery = ingredient.getIngredientName() + " " + "(" + ingredient.getIngredientCount() + " " + ingredient.getIngredientUnit() + ")";
             int recipeID = 0;
             if (groceriesTreeMap.containsKey(grocery)) {
-                recipeID = groceriesTreeMap.get(grocery); // save recipeID for re-inserting in TreeMap value
-                groceriesTreeMap.remove(grocery); // re-insert new Ingredient Key with new counter, remove it first
+                recipeID = groceriesTreeMap.get(grocery); // save recipeID for re-inserting in TreeMap valueå
             }
 
             if(grocery.equals(groceryItem)) { //

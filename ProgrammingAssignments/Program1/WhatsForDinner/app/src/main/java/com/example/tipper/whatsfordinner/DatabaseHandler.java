@@ -168,12 +168,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return recipeAdded;
     }
 
-    public Recipe getRecipe(String name)
+    public Recipe getRecipe(int id)
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_RECIPES, new String[] { KEY_ID, KEY_NAME, KEY_INGREDIENTS, KEY_IMAGE_PATH, KEY_DESCRIPTION}, KEY_NAME + "=?",
-                new String[] {name}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_RECIPES, new String[] { KEY_ID, KEY_NAME, KEY_INGREDIENTS, KEY_IMAGE_PATH, KEY_DESCRIPTION}, KEY_ID + "=?",
+                new String[] {String.valueOf(id)}, null, null, null, null);
 
         if(cursor != null) {
             cursor.moveToFirst();
@@ -191,6 +191,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         recipe.setDescription(cursor.getString(4));
 
         return recipe;
+    }
+
+    public int updateRecipe(Recipe recipe) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Gson gson = new Gson();
+        String arrayListStr = gson.toJson(recipe.getIngredients());
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, recipe.getName());
+        values.put(KEY_INGREDIENTS, arrayListStr);
+        values.put(KEY_IMAGE_PATH, recipe.getImagePath());
+        values.put(KEY_DESCRIPTION, recipe.getDescription());
+
+        // updating row
+        return db.update(TABLE_RECIPES, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(recipe.getID()) });
     }
 
 

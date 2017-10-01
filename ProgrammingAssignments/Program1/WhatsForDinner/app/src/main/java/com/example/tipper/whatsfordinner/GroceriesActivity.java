@@ -1,6 +1,7 @@
 package com.example.tipper.whatsfordinner;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,8 @@ public class GroceriesActivity extends AppCompatActivity {
     private Context groceriesContext;
     private SwipeMenuListView groceriesListView;
     private ArrayAdapter<String> groceriesAdapter;
-    private TreeMap<String, Ingredient> groceriesTreeMap;
+    private TreeMap<String, Integer> groceriesTreeMap;
+    private ArrayList<String> ingredientList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +39,23 @@ public class GroceriesActivity extends AppCompatActivity {
 
         groceriesListView = (SwipeMenuListView) findViewById(R.id.grocerieslistView);
 
+
         ArrayList<Recipe> recipeList = db.getAllRecipes();
-        ArrayList<String> ingredientList = new ArrayList<String>();
+        groceriesTreeMap = new TreeMap<String, Integer>();
         ArrayList<Ingredient> recipeIngredientList;
 
         // Getting all the Ingredients from Recipe Table and storing in ArrayList<String> ingredientList
         for(Recipe r : recipeList) {
             recipeIngredientList = r.getIngredients();
-            for (Ingredient i : recipeIngredientList) {
-                String ingredient = i.getIngredientName() + " " + "(" + i.getIngredientCount() + " " + i.getIngredientUnit() + ")";
+            for(int i = 0; i < recipeIngredientList.size(); i++) {
+                String ingredient = recipeIngredientList.get(i).getIngredientName() + " " + "(" + recipeIngredientList.get(i).getIngredientCount() + " " + recipeIngredientList.get(i).getIngredientUnit() + ")";
                 ingredientList.add(ingredient);
-                groceriesTreeMap.put(r.getName(), i);
+                groceriesTreeMap.put(ingredient, r.getID());
+
             }
+
         }
+
 
         groceriesAdapter = new ArrayAdapter<String> (this,  android.R.layout.simple_list_item_1, ingredientList);
         groceriesListView.setAdapter(groceriesAdapter);
@@ -100,21 +106,27 @@ public class GroceriesActivity extends AppCompatActivity {
         groceriesListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Object item = groceriesListView.getItemAtPosition(position);
+                Object groceryItem = groceriesListView.getItemAtPosition(position);
                 Toast toast;
+                Recipe recipe = new Recipe();
+
+                Log.v("Select Item", groceryItem.toString());
+                int recipeID = groceriesTreeMap.get(groceryItem.toString());
+                recipe = db.getRecipe(recipeID);
+
                 switch (index) {
                     case 0:
-                        // increment
-                        toast = Toast.makeText(groceriesContext, "+", Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.BOTTOM, 0, 0);
-                        toast.show();
+
+                        // increment unit counter
+                        manipulateUnitCounter(recipe, groceryItem.toString(), 1);
                         break;
+
                     case 1:
-                        // decrement
-                        toast = Toast.makeText(groceriesContext, "-", Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.BOTTOM, 0, 0);
-                        toast.show();
+
+                        // decrement unit counter
+                        manipulateUnitCounter(recipe, groceryItem.toString(), -1);
                         break;
+
                 }
                 return false;
             }
@@ -125,5 +137,58 @@ public class GroceriesActivity extends AppCompatActivity {
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
+    }
+
+    private void manipulateUnitCounter(Recipe recipe, String groceryItem, int countChecker)
+    {
+        ArrayList<Ingredient> ingredients = recipe.getIngredients();
+        String grocery = "";
+        for(int i = 0; i < ingredients.size(); i++) {
+            Ingredient ingredient = ingredients.get(i);
+            grocery = ingredient.getIngredientName() + " " + "(" + ingredient.getIngredientCount() + " " + ingredient.getIngredientUnit() + ")";
+            int recipeID = 0;
+            if (groceriesTreeMap.containsKey(grocery)) {
+                recipeID = groceriesTreeMap.get(grocery); // save recipeID for re-inserting in TreeMap value
+                groceriesTreeMap.remove(grocery); // re-insert new Ingredient Key with new counter, remove it first
+            }
+
+            if(grocery.equals(groceryItem)) { //
+                int count = ingredient.getIngredientCount();
+                if (countChecker == 1) {
+                    count += 1; // increment count
+                } else if (countChecker == -1){
+                    count -= 1; // decrement count
+                }
+                ingredient.setIngredientCount(count); // set new count in the ingredient
+                ingredients.set(i, ingredient); // update ingredients ArrayList of new count
+                grocery = ingredient.getIngredientName() + " " + "(" + ingredient.getIngredientCount() + " " + ingredient.getIngredientUnit() + ")"; //reset with new count
+                groceriesTreeMap.put(grocery, recipeID);
+                break;
+            }
+
+        }
+
+        // ingredientList update for ArrayAdapter SwipeMenuListView
+        for(int i = 0; i < ingredientList.size(); i++) {
+            if(ingredientList.get(i).equals(groceryItem)) {
+                //Update ingredientList with new count
+                ingredientList.set(i, grocery);
+                groceriesAdapter.notifyDataSetChanged();
+            }
+        }
+
+        recipe.setIngredients(ingredients);
+        int result = db.updateRecipe(recipe);
+
+        Toast toast;
+        if(result == 1) { // Successful update
+            toast = Toast.makeText(groceriesContext, grocery, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
+        } else {
+            toast = Toast.makeText(groceriesContext, "Update for: " + grocery + " unsuccessful", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
+        }
     }
 }

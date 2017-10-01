@@ -143,6 +143,7 @@ public class GroceriesActivity extends AppCompatActivity {
     {
         ArrayList<Ingredient> ingredients = recipe.getIngredients();
         String grocery = "";
+        int count = 0;
         for(int i = 0; i < ingredients.size(); i++) {
             Ingredient ingredient = ingredients.get(i);
             grocery = ingredient.getIngredientName() + " " + "(" + ingredient.getIngredientCount() + " " + ingredient.getIngredientUnit() + ")";
@@ -153,16 +154,28 @@ public class GroceriesActivity extends AppCompatActivity {
             }
 
             if(grocery.equals(groceryItem)) { //
-                int count = ingredient.getIngredientCount();
+                count = ingredient.getIngredientCount();
                 if (countChecker == 1) {
                     count += 1; // increment count
                 } else if (countChecker == -1){
                     count -= 1; // decrement count
+
                 }
-                ingredient.setIngredientCount(count); // set new count in the ingredient
-                ingredients.set(i, ingredient); // update ingredients ArrayList of new count
-                grocery = ingredient.getIngredientName() + " " + "(" + ingredient.getIngredientCount() + " " + ingredient.getIngredientUnit() + ")"; //reset with new count
-                groceriesTreeMap.put(grocery, recipeID);
+
+                if (count == 0) {
+                    // delete ingredients from Recipe ArrayList<Ingredient> and update to ArrayAdapter
+                    ingredientList.remove(i);
+                    ingredients.remove(i); // remove ingredient from arraylist
+                    grocery = ingredient.getIngredientName() + " removed from Groceries List";
+                    groceriesAdapter.notifyDataSetChanged();
+
+                } else {
+                    ingredient.setIngredientCount(count); // set new count in the ingredient
+                    ingredients.set(i, ingredient); // update ingredients ArrayList of new count
+                    grocery = ingredient.getIngredientName() + " " + "(" + ingredient.getIngredientCount() + " " + ingredient.getIngredientUnit() + ")"; //reset with new count
+                    groceriesTreeMap.put(grocery, recipeID);
+                }
+
                 break;
             }
 

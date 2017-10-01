@@ -4,4 +4,12 @@
     <string name="banner_text">Author: Tipper Truong\nVersion Number: 1.0.0\nCopyright &#169; TRUTIPZ MD Corporation</string>
     <string name="title_recipe_list">Recipes</string>
     <string name="title_recipe_detail">Recipe Detail</string>
+
+    <string-array name="units">
+        <item>Select unit of measurement</item>
+        <item>pieces</item>
+        <item>lb</item>
+        <item>cup</item>
+        <item>tablespoons</item>
+    </string-array>
 </resources>

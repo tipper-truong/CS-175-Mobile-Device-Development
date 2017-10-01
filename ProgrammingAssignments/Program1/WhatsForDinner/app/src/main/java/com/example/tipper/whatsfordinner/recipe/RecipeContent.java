@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.tipper.whatsfordinner.DatabaseHandler;
+import com.example.tipper.whatsfordinner.Ingredient;
 import com.example.tipper.whatsfordinner.Recipe;
 
 import java.util.ArrayList;
@@ -101,11 +102,11 @@ public class RecipeContent {
         //public final String content;
         //public final String details;
         public final String recipeName;
-        public final ArrayList<String> recipeIngredients;
+        public final ArrayList<Ingredient> recipeIngredients;
         public final String recipeImagePath;
         public final String recipeDetails;
 
-        public RecipeItem(String recipeName, ArrayList<String> recipeIngredients, String recipeImagePath, String recipeDetails) {
+        public RecipeItem(String recipeName, ArrayList<Ingredient> recipeIngredients, String recipeImagePath, String recipeDetails) {
             this.recipeName = recipeName;
             this.recipeImagePath = recipeImagePath;
             this.recipeIngredients = recipeIngredients;

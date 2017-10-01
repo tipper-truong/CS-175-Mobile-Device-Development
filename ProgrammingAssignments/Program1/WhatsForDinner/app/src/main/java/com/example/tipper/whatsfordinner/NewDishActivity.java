@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.reginald.editspinner.EditSpinner;
 import com.squareup.picasso.Picasso;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -43,12 +48,17 @@ public class NewDishActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "IMAGES_PREF";
     public static final String PREFS_KEY = "imageKey";
     private Recipe recipe;
-    ArrayList<String> ingredients;
+    ArrayList<Ingredient> ingredients;
     private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> adapterSpinner;
     private AutoCompleteTextView actv;
+    private Spinner spinnerUnit;
+    private EditText editTextUnitNum;
 
     private DatabaseHandler db;
-    ArrayList<AutoCompleteTextView> ingredientsList;
+    ArrayList<AutoCompleteTextView> ingredientsList; //ingredients name list
+    ArrayList<Spinner> unitList; // ingredient unit list
+    ArrayList<EditText> unitNumList; // ingredient unit number list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +69,11 @@ public class NewDishActivity extends AppCompatActivity {
         db = new DatabaseHandler(this);
 
         /* For creating/upgrading tables because doing Database db = new DatabaseHandler(); doesn't create new tables or upgrade it for some reason */
-        //SQLiteDatabase database = new DatabaseHandler(getApplicationContext()).getWritableDatabase();
-        //database.close();
+        SQLiteDatabase database = new DatabaseHandler(getApplicationContext()).getWritableDatabase();
+        database.close();
 
-        ingredients = new ArrayList<String>();
-        ingredients.add("Apple");
-        ingredients.add("Banana");
-        ingredients.add("Cherry");
-        ingredients.add("Date");
-        ingredients.add("Grape");
-        ingredients.add("Kiwi");
-        ingredients.add("Mango");
-        ingredients.add("Pear");
+        ingredients = new ArrayList<Ingredient>();
 
-        for(int i = 0; i < ingredients.size(); i++) {
-            db.addIngredient(newDishContext, ingredients.get(i));
-        }
 
         /********** IF THE USER SELECTED AN IMAGE LOCALLY **********/
         SharedPreferences settings;
@@ -96,6 +95,9 @@ public class NewDishActivity extends AppCompatActivity {
 
         /********** ENTER AND ADD INGREDIENTS **********/
         ingredientsList = new ArrayList<AutoCompleteTextView>();
+        unitNumList = new ArrayList<EditText>();
+        unitList = new ArrayList<Spinner>();
+
 
         final LinearLayout ingredients_LinearLayout = (LinearLayout) findViewById(R.id.ingredients_linearLayout);
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -108,20 +110,41 @@ public class NewDishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                ArrayList<String> ingredientNameStrList = new ArrayList<String>();
                 ingredients = db.getAllIngredients();
+                for (Ingredient i : ingredients) {
+                    ingredientNameStrList.add(i.getIngredientName());
+                }
                 //Creating the instance of ArrayAdapter containing list of fruit names
                 adapter = new ArrayAdapter<String>
-                        (newDishContext, android.R.layout.select_dialog_item, ingredients);
-                //Getting the instance of AutoCompleteTextView
-                actv = new AutoCompleteTextView(newDishContext);
+                        (newDishContext, android.R.layout.select_dialog_item, ingredientNameStrList);
+                adapterSpinner = new ArrayAdapter<String>(newDishContext, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.units));
+
+                actv = new AutoCompleteTextView(newDishContext); //Ingredient Name
+                editTextUnitNum = new EditText(newDishContext); // Ingredient Unit Number
+                spinnerUnit = new Spinner(newDishContext); // Ingredient Unit --> lb, pieces, etc.
+
                 actv.requestFocus();
                 actv.setThreshold(1);//will start working from first character
                 actv.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
+
+                spinnerUnit.setAdapter(adapterSpinner); //setting adapter data into EditSpinner (food units)
+
                 actv.setTextColor(Color.RED);
                 actv.setHint("Enter an ingredient");
                 actv.setLayoutParams(params);
+
+                editTextUnitNum.setHint("Enter unit number per measurement");
+                editTextUnitNum.setInputType(InputType.TYPE_CLASS_NUMBER);
+
                 ingredients_LinearLayout.addView(actv);
+                ingredients_LinearLayout.addView(editTextUnitNum);
+                ingredients_LinearLayout.addView(spinnerUnit);
+
+                // ADD UNIT AND COUNT ON INGREDIENTS TABLE AND MANIPULATE DATA BASE ON THAT INFO
                 ingredientsList.add(actv);
+                unitNumList.add(editTextUnitNum);
+                unitList.add(spinnerUnit);
             }
         });
 
@@ -130,19 +153,36 @@ public class NewDishActivity extends AppCompatActivity {
         submitRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<String> ingredientsStrList = new ArrayList<String>();
+                ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
+                for(int i = 0; i < ingredientsList.size()
+                        && i < unitNumList.size()
+                        && i < unitList.size(); i++) {
+
+                    if(!ingredientsList.get(i).getText().toString().isEmpty()
+                            && !unitNumList.get(i).getText().toString().isEmpty()
+                            && !unitList.get(i).getSelectedItem().toString().equals("Select unit of measurement")) {
+
+                        Ingredient ingredient = new Ingredient();
+                        ingredient.setIngredientName(ingredientsList.get(i).getText().toString());
+                        ingredient.setIngredientUnit(unitList.get(i).getSelectedItem().toString());
+                        ingredient.setIngredientCount(Integer.parseInt(unitNumList.get(i).getText().toString()));
+
+                        ingredientList.add(ingredient);
+                    }
+                }
+                /*ArrayList<String> ingredientsStrList = new ArrayList<String>();
                 for (int i = 0; i < ingredientsList.size(); i++) {
                     if(!ingredientsList.get(i).getText().toString().isEmpty()) {
                         ingredientsStrList.add(ingredientsList.get(i).getText().toString());
                     }
-                }
+                }*/
                 EditText recipeName = (EditText) (findViewById(R.id.recipe_editText));
                 EditText recipeDescription = (EditText) findViewById(R.id.recipe_textArea);
 
-                if(!recipeName.getText().toString().isEmpty() && !recipeDescription.getText().toString().isEmpty() && !ingredientsStrList.isEmpty()) {
+                if(!recipeName.getText().toString().isEmpty() && !recipeDescription.getText().toString().isEmpty() && !ingredientList.isEmpty()) {
                     recipe.setName(recipeName.getText().toString()); //store in Recipe
                     recipe.setDescription(recipeDescription.getText().toString());
-                    recipe.setIngredients(ingredientsStrList); //store in Recipe
+                    recipe.setIngredients(ingredientList); //store in Recipe
 
                     /*
 
@@ -184,8 +224,8 @@ public class NewDishActivity extends AppCompatActivity {
                     }
 
                     //Adding new ingredients for Ingredient AutoCompleteTextView
-                    for(int i = 0; i < recipe.getIngredients().size(); i++) {
-                        db.addIngredient(newDishContext, recipe.getIngredients().get(i));
+                    for(int i = 0; i < ingredientList.size(); i++) {
+                        db.addIngredient(newDishContext, ingredientList.get(i).getIngredientName(), ingredientList.get(i).getIngredientUnit(), ingredientList.get(i).getIngredientCount());
                         adapter.notifyDataSetChanged();
                     }
 

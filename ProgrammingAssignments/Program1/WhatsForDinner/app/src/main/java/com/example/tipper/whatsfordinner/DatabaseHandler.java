@@ -42,6 +42,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Ingredient Table Column names
     private static final String KEY_INGREDIENTS_NAME = "ingredients";
+    private static final String KEY_UNITS = "units";
+    private static final String KEY_COUNT = "count";
 
     //Meal table name
     private static final String TABLE_MEALS = "Meal";
@@ -62,6 +64,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_INGREDIENT_TABLE = "CREATE TABLE " + TABLE_INGREDIENTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_INGREDIENTS_NAME + " TEXT,"
+                + KEY_UNITS + " TEXT,"
+                + KEY_COUNT + " INTEGER,"
                 +  "UNIQUE (" + KEY_INGREDIENTS_NAME + ") ON CONFLICT ROLLBACK)"; //helps avoid duplicates
 
         String CREATE_MEAL_TABLE = "CREATE TABLE " + TABLE_MEALS + "("
@@ -94,12 +98,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     /*********** OPERATIONS FOR INGREDIENTS TABLE ***********/
-    public void addIngredient(Context context, String ingredient)
+    public void addIngredient(Context context, String ingredient, String unit, int count)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_INGREDIENTS_NAME, ingredient);
+        values.put(KEY_UNITS, unit);
+        values.put(KEY_COUNT, count);
 
         try {
             db.insertOrThrow(TABLE_INGREDIENTS, null, values);
@@ -110,9 +116,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ArrayList<String> getAllIngredients()
+    public ArrayList<Ingredient> getAllIngredients()
     {
-        ArrayList<String> ingredientList = new ArrayList<String>();
+        ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
 
         //SELECT ALL Query
         String selectQuery = "SELECT * FROM " + TABLE_INGREDIENTS;
@@ -123,7 +129,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //Looping through all the rows and adding to the list
         if (cursor.moveToFirst()) {
             do {
-               ingredientList.add(cursor.getString(1));
+                Ingredient ingredient = new Ingredient();
+                ingredient.setIngredientName(cursor.getString(1));
+                ingredient.setIngredientUnit(cursor.getString(2));
+                ingredient.setIngredientCount(cursor.getInt(3));
+               ingredientList.add(ingredient);
             } while (cursor.moveToNext());
         }
 
@@ -175,7 +185,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         recipe.setID(cursor.getInt(0));
         recipe.setName(cursor.getString(1));
         Gson gson = new Gson();
-        ArrayList<String> ingredientList = gson.fromJson(cursor.getString(2), new TypeToken<ArrayList<String>>(){}.getType());
+        ArrayList<Ingredient> ingredientList = gson.fromJson(cursor.getString(2), new TypeToken<ArrayList<Ingredient>>(){}.getType());
         recipe.setIngredients(ingredientList);
         recipe.setImagePath(cursor.getString(3));
         recipe.setDescription(cursor.getString(4));
@@ -202,7 +212,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 recipe.setID(Integer.parseInt(cursor.getString(0)));
                 recipe.setName(cursor.getString(1));
                 //Retrieve the token of ArrayList of ingredients
-                ArrayList<String> ingredientList = gson.fromJson(cursor.getString(2), new TypeToken<ArrayList<String>>(){}.getType());
+                ArrayList<Ingredient> ingredientList = gson.fromJson(cursor.getString(2), new TypeToken<ArrayList<Ingredient>>(){}.getType());
                 recipe.setIngredients(ingredientList);
                 recipe.setImagePath(cursor.getString(3));
                 recipe.setDescription(cursor.getString(4));

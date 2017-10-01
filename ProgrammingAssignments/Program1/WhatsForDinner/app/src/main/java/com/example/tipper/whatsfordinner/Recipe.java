@@ -8,13 +8,13 @@ public class Recipe
 {
     private int id;
     private String name;
-    private ArrayList<String> ingredients;
+    private ArrayList<Ingredient> ingredient;
     private String imagePath;
     private String description;
 
     public Recipe()
     {
-        ingredients = new ArrayList<String>();
+        ingredient = new ArrayList<Ingredient>();
     }
 
     public void setID(int id) { this.id = id; }
@@ -29,12 +29,12 @@ public class Recipe
         this.name = name;
     }
 
-    public ArrayList<String> getIngredients() {
-        return ingredients;
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredient;
     }
 
-    public void setIngredients(ArrayList<String> ingredients) {
-        this.ingredients = ingredients;
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredient = ingredients;
     }
 
     public String getImagePath() { return imagePath; }

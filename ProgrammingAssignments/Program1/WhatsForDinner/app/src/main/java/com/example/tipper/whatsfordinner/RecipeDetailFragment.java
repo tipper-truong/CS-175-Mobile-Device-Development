@@ -72,15 +72,15 @@ public class RecipeDetailFragment extends Fragment {
 
         // Initialize Relative Layout for Recipe Detail XML
         if (mItem != null) {
-            //((TextView) rootView.findViewById(R.id.recipe_detail)).setText(mItem.recipeDetails);
-            //RelativeLayout rl = rootView.findViewById(R.id.recipe_detail_rl);
             TextView recipeName = (TextView) rootView.findViewById(R.id.recipe_name_detail);
             TextView recipeIngredients = (TextView) rootView.findViewById(R.id.recipe_ingredients_detail);
             ImageView recipeImage = (ImageView) rootView.findViewById(R.id.recipe_image_detail);
             TextView recipeDescription = (TextView) rootView.findViewById(R.id.recipe_description__detail);
             recipeName.setText(mItem.recipeName); //set recipe name
-            for (String r : mItem.recipeIngredients) {
-                recipeIngredients.append(r + " \n"); // set recipe ingredients
+            for (Ingredient i : mItem.recipeIngredients) {
+                recipeIngredients.append(i.getIngredientName()  + " " +
+                                         i.getIngredientCount() + " " +
+                                         i.getIngredientUnit()  + " " + " \n"); // set recipe ingredients
             }
 
             String imagePath = mItem.recipeImagePath; //set recipe image

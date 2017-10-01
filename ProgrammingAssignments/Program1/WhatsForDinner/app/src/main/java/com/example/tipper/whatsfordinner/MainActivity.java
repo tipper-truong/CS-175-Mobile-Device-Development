@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView whatsdinnerBannerImage;
     private ImageView addDishImage;
     private ImageView recipeImage;
+    private ImageView groceriesImage;
     private TextView addDishText;
     private TextView recipeText;
+    private TextView groceriesText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //RECIPE NEEDS WORK
+        //RECIPE
         recipeText = (TextView) findViewById(R.id.recipes_textView);
         recipeImage = (ImageView) findViewById(R.id.recipes_imageView);
 
@@ -159,6 +161,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RecipeListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //GROCERIES
+        groceriesText = (TextView) findViewById(R.id.groceries_textView);
+        groceriesImage = (ImageView) findViewById(R.id.groceries_imageView);
+
+        groceriesText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), GroceriesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        groceriesImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), GroceriesActivity.class);
                 startActivity(intent);
             }
         });

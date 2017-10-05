@@ -48,7 +48,7 @@ public class NewDishActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "IMAGES_PREF";
     public static final String PREFS_KEY = "imageKey";
     private Recipe recipe;
-    ArrayList<Ingredient> ingredients;
+    private ArrayList<Ingredient> ingredients;
     private ArrayAdapter<String> adapter;
     private ArrayAdapter<String> adapterSpinner;
     private AutoCompleteTextView actv;
@@ -56,9 +56,9 @@ public class NewDishActivity extends AppCompatActivity {
     private EditText editTextUnitNum;
 
     private DatabaseHandler db;
-    ArrayList<AutoCompleteTextView> ingredientsList; //ingredients name list
-    ArrayList<Spinner> unitList; // ingredient unit list
-    ArrayList<EditText> unitNumList; // ingredient unit number list
+    private ArrayList<AutoCompleteTextView> ingredientsList; //ingredients name list
+    private ArrayList<Spinner> unitList; // ingredient unit list
+    private ArrayList<EditText> unitNumList; // ingredient unit number list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

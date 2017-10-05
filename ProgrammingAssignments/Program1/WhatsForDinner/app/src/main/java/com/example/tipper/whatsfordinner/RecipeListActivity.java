@@ -47,6 +47,7 @@ public class RecipeListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     public static final String EDIT_RECIPE_PREF = "EDIT_RECIPE_PREF" ;
     public static final String recipeKey = "recipeKey";
+    private DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,29 +104,10 @@ public class RecipeListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
+            db = new DatabaseHandler(getApplicationContext());
             holder.mItem = mValues.get(position);
 
             holder.mRecipeNameView.setText(mValues.get(position).recipeName); //recipe name
-
-            holder.mRecipeNameView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    SharedPreferences settings;
-                    SharedPreferences.Editor editor;
-                    settings = view.getContext().getSharedPreferences(EDIT_RECIPE_PREF, Context.MODE_PRIVATE); //1
-                    editor = settings.edit(); //2
-
-                    String recipeName = holder.mRecipeNameView.getText().toString();
-                    Log.v("Recipe Name", recipeName);
-                    editor.putString(recipeKey, recipeName); //3
-                    editor.commit(); //4
-
-                    Intent intent = new Intent(view.getContext(), EditDishActivity.class);
-                    startActivity(intent);
-
-                    return false;
-                }
-            });
 
             if(mTwoPane) {
                 Bundle arguments = new Bundle();
@@ -140,6 +122,8 @@ public class RecipeListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+
                     if (mTwoPane) {
 
                         Bundle arguments = new Bundle();
@@ -158,6 +142,26 @@ public class RecipeListActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    SharedPreferences settings;
+                    SharedPreferences.Editor editor;
+                    settings = view.getContext().getSharedPreferences(EDIT_RECIPE_PREF, Context.MODE_PRIVATE); //1
+                    editor = settings.edit(); //2
+
+                    String recipeName = holder.mRecipeNameView.getText().toString();
+                    Log.v("Recipe Name", recipeName);
+                    editor.putString(recipeKey, recipeName); //3
+                    editor.commit(); //4
+
+                    Intent intent = new Intent(view.getContext(), EditDishActivity.class);
+                    startActivity(intent);
+
+                    return false;
+                }
+            });
         }
 
         @Override
@@ -167,7 +171,6 @@ public class RecipeListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            //public final TextView mIdView;
             public final TextView mRecipeNameView;
             public final TextView mRecipeIngredientsView;
             public final ImageView mRecipeImageView;

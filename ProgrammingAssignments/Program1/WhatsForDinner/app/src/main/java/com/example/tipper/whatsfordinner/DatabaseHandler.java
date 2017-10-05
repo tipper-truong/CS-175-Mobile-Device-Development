@@ -97,6 +97,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /********** MEAL OPERATIONS **********/
+    public void addMeal(Meal meal)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_MEAL_NAME, meal.getMealName());
+        values.put(KEY_MEAL_COUNT, meal.getMealCount());
+
+        db.insert(TABLE_MEALS, null, values);
+
+        db.close();
+    }
+
+    public Meal getMeal(String mealName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_MEALS, new String[] { KEY_ID, KEY_MEAL_NAME, KEY_MEAL_COUNT}, KEY_MEAL_NAME + "=?",
+                new String[] {mealName}, null, null, null, null);
+
+        if(cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+
+        Meal meal = new Meal(cursor.getColumnName(1), cursor.getInt(2));
+
+        return meal;
+    }
+
     /*********** OPERATIONS FOR INGREDIENTS TABLE ***********/
     public void addIngredient(Context context, String ingredient, String unit, int count)
     {

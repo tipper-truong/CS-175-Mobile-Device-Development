@@ -165,17 +165,15 @@ public class NewDishActivity extends AppCompatActivity {
                         Ingredient ingredient = new Ingredient();
                         ingredient.setIngredientName(ingredientsList.get(i).getText().toString());
                         ingredient.setIngredientUnit(unitList.get(i).getSelectedItem().toString());
+                        ingredient.setIngredientUnitId(unitList.get(i).getSelectedItemPosition());
                         ingredient.setIngredientCount(Integer.parseInt(unitNumList.get(i).getText().toString()));
 
                         ingredientList.add(ingredient);
                     }
                 }
-                /*ArrayList<String> ingredientsStrList = new ArrayList<String>();
-                for (int i = 0; i < ingredientsList.size(); i++) {
-                    if(!ingredientsList.get(i).getText().toString().isEmpty()) {
-                        ingredientsStrList.add(ingredientsList.get(i).getText().toString());
-                    }
-                }*/
+
+
+
                 EditText recipeName = (EditText) (findViewById(R.id.recipe_editText));
                 EditText recipeDescription = (EditText) findViewById(R.id.recipe_textArea);
 
@@ -237,6 +235,7 @@ public class NewDishActivity extends AppCompatActivity {
 
             }
         });
+
 
         /********** UPLOAD IMAGE VIA URL OR LOCALLY POP UP WINDOW **********/
         uploadImagePopupWindow();

@@ -2,6 +2,7 @@ package com.example.tipper.whatsfordinner;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +45,8 @@ public class RecipeListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    public static final String EDIT_RECIPE_PREF = "EDIT_RECIPE_PREF" ;
+    public static final String recipeKey = "recipeKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,32 +104,28 @@ public class RecipeListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            //holder.mIdView.setText(mValues.get(position).id);
+
             holder.mRecipeNameView.setText(mValues.get(position).recipeName); //recipe name
 
-           /* ArrayList<String> recipeList = mValues.get(position).recipeIngredients; //recipe ingredients
-            for (String r: recipeList) {
-                holder.mRecipeIngredientsView.setText(r); //displaying all the recipe ingredients
-            }
+            holder.mRecipeNameView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    SharedPreferences settings;
+                    SharedPreferences.Editor editor;
+                    settings = view.getContext().getSharedPreferences(EDIT_RECIPE_PREF, Context.MODE_PRIVATE); //1
+                    editor = settings.edit(); //2
 
-            String imagePath = mValues.get(position).recipeImagePath;
-            Log.v("Image Path", imagePath);
-            if(URLUtil.isValidUrl(imagePath)) { //recipe image path
-                // It's a URL
-                try {
-                    URL url = new URL(imagePath);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    Picasso.with(getApplicationContext()).load(imagePath).into(holder.mRecipeImageView);
-                    urlConnection.disconnect(); //avoid any response leakage
-                } catch(java.io.IOException e) {
-                    e.printStackTrace();
+                    String recipeName = holder.mRecipeNameView.getText().toString();
+                    Log.v("Recipe Name", recipeName);
+                    editor.putString(recipeKey, recipeName); //3
+                    editor.commit(); //4
+
+                    Intent intent = new Intent(view.getContext(), EditDishActivity.class);
+                    startActivity(intent);
+
+                    return false;
                 }
-            } else {
-                // Else: it's a drawable resource ID
-                holder.mRecipeImageView.setImageResource(Integer.valueOf(imagePath));
-            }
-            holder.mRecipeDescriptionView.setText(mValues.get(position).recipeDetails); */
-
+            });
 
             if(mTwoPane) {
                 Bundle arguments = new Bundle();

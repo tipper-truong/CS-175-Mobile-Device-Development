@@ -193,6 +193,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return recipe;
     }
 
+    public Recipe getRecipe(String recipeName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_RECIPES, new String[] { KEY_ID, KEY_NAME, KEY_INGREDIENTS, KEY_IMAGE_PATH, KEY_DESCRIPTION}, KEY_NAME + "=?",
+                new String[] {recipeName}, null, null, null, null);
+
+        if(cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+
+        Recipe recipe = new Recipe();
+        recipe.setID(cursor.getInt(0));
+        recipe.setName(cursor.getString(1));
+        Gson gson = new Gson();
+        ArrayList<Ingredient> ingredientList = gson.fromJson(cursor.getString(2), new TypeToken<ArrayList<Ingredient>>(){}.getType());
+        recipe.setIngredients(ingredientList);
+        recipe.setImagePath(cursor.getString(3));
+        recipe.setDescription(cursor.getString(4));
+
+        return recipe;
+    }
+
     public int updateRecipe(Recipe recipe) {
         SQLiteDatabase db = this.getWritableDatabase();
 

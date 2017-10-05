@@ -36,7 +36,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.tipper.whatsfordinner.RecipeListActivity" />
         </activity>
-        <activity android:name=".GroceriesActivity"></activity>
+        <activity android:name=".GroceriesActivity" />
+        <activity android:name=".EditDishActivity"></activity>
     </application>
 
 </manifest>

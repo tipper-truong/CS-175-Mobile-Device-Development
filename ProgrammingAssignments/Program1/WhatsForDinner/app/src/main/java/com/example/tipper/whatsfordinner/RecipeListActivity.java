@@ -3,6 +3,7 @@ package com.example.tipper.whatsfordinner;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -122,6 +124,40 @@ public class RecipeListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String recipeName = holder.mRecipeNameView.getText().toString();
+
+                    Meal meal;
+                    try {
+                        meal = db.getMeal(recipeName);
+                    } catch (CursorIndexOutOfBoundsException e) {
+                        meal = null;
+                    }
+
+                    if (meal == null) {
+                        // Meal does not exist in Meal Table
+                        Meal addMeal = new Meal();
+                        addMeal.setMealName(recipeName);
+                        addMeal.setMealCount(1);
+                        addMeal.setMealDate(null);
+                        addMeal.setMealCategory(null);
+                        db.addMeal(addMeal);
+                        Toast toast = new Toast(v.getContext());
+                        toast.makeText(v.getContext(), "Added Meal successfully", Toast.LENGTH_SHORT);
+                    } else {
+                        // Meal does exist in Meal Table
+                        int count = meal.getMealCount();
+                        count+=1;
+                        meal.setMealCount(count);
+                        int updateMeal = db.updateMeal(meal);
+                        if(updateMeal == 1) {
+                            Toast toast = new Toast(v.getContext());
+                            toast.makeText(v.getContext(), "Updated Meal Count successfully", Toast.LENGTH_SHORT);
+                        } else {
+                            Toast toast = new Toast(v.getContext());
+                            toast.makeText(v.getContext(), "Updated Meal Count unsuccessfully", Toast.LENGTH_SHORT);
+                        }
+
+                    }
 
 
                     if (mTwoPane) {

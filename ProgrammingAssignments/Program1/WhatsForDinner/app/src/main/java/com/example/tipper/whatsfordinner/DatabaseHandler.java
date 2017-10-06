@@ -49,8 +49,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_MEALS = "Meal";
 
     //Meal Table Column names
-    private static final String KEY_MEAL_NAME = "meal";
-    private static final String KEY_MEAL_COUNT = "meal_count";
+    private static final String KEY_MEAL_NAME = "name";
+    private static final String KEY_MEAL_COUNT = "count";
+    private static final String KEY_MEAL_DATE = "date";
+    private static final String KEY_MEAL_CATEGORY = "category";
 
 
     public DatabaseHandler(Context context) {
@@ -71,7 +73,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_MEAL_TABLE = "CREATE TABLE " + TABLE_MEALS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_MEAL_NAME + " TEXT,"
-                + KEY_MEAL_COUNT + " INTEGER )"; //helps avoid duplicates
+                + KEY_MEAL_DATE + " TEXT, "
+                + KEY_MEAL_CATEGORY + " TEXT " + ")"; //helps avoid duplicates
 
         String CREATE_RECIPE_TABLE = "CREATE TABLE " + TABLE_RECIPES + "("
                         + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -105,6 +108,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_MEAL_NAME, meal.getMealName());
         values.put(KEY_MEAL_COUNT, meal.getMealCount());
+        values.put(KEY_MEAL_DATE, "null");
+        values.put(KEY_MEAL_CATEGORY, "null");
 
         db.insert(TABLE_MEALS, null, values);
 
@@ -115,6 +120,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
+
         Cursor cursor = db.query(TABLE_MEALS, new String[] { KEY_ID, KEY_MEAL_NAME, KEY_MEAL_COUNT}, KEY_MEAL_NAME + "=?",
                 new String[] {mealName}, null, null, null, null);
 
@@ -124,9 +130,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-        Meal meal = new Meal(cursor.getColumnName(1), cursor.getInt(2));
+        Meal meal = new Meal();
+        meal.setMealName(cursor.getString(1));
+        meal.setMealCount(cursor.getInt(2));
+
+        try {
+            Gson gson = new Gson();
+            ArrayList<String> mealDateList = gson.fromJson(cursor.getString(3), new TypeToken<ArrayList<String>>(){}.getType());
+            meal.setMealDate(mealDateList);
+            ArrayList<String> categoryMealList = gson.fromJson(cursor.getString(4), new TypeToken<ArrayList<String>>(){}.getType());
+            meal.setMealCategory(categoryMealList);
+        } catch (IllegalStateException e) {
+
+        }
+
+
+
+
 
         return meal;
+    }
+
+    public int updateMeal(Meal meal) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Gson gson = new Gson();
+        String mealDateList = gson.toJson(meal.getMealDate());
+        String mealCategoryList = gson.toJson(meal.getMealCategory());
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_MEAL_NAME, meal.getMealName());
+        values.put(KEY_MEAL_COUNT, meal.getMealCount());
+        values.put(KEY_MEAL_DATE, mealDateList);
+        values.put(KEY_MEAL_CATEGORY, mealCategoryList);
+
+        // updating row
+        return db.update(TABLE_MEALS, values, KEY_MEAL_NAME + " = ?",
+                new String[] { meal.getMealName() });
     }
 
     /*********** OPERATIONS FOR INGREDIENTS TABLE ***********/

@@ -138,8 +138,6 @@ public class RecipeListActivity extends AppCompatActivity {
                         Meal addMeal = new Meal();
                         addMeal.setMealName(recipeName);
                         addMeal.setMealCount(1);
-                        addMeal.setMealDate(null);
-                        addMeal.setMealCategory(null);
                         db.addMeal(addMeal);
                         Toast toast = new Toast(v.getContext());
                         toast.makeText(v.getContext(), "Added Meal successfully", Toast.LENGTH_SHORT);

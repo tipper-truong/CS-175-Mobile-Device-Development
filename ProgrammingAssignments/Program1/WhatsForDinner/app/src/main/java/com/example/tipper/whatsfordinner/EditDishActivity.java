@@ -309,7 +309,6 @@ public class EditDishActivity extends AppCompatActivity {
         SharedPreferences settings;
         String recipeName;
         SharedPreferences.Editor editor;
-        GalleryImageAdapter galleryImageAdapter = new GalleryImageAdapter(this);
         Recipe recipe = new Recipe();
         settings = getApplicationContext().getSharedPreferences(EDIT_RECIPE_PREF, Context.MODE_PRIVATE);
         recipeName = settings.getString(recipeKey, null);

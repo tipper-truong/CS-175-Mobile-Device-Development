@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tipper.whatsfordinner.CreateMealPlanActivity">
+
+    <TextView
+        android:id="@+id/setMealDate"
+        android:layout_width="match_parent"
+        android:layout_height="551dp"
+        android:text="Selected Date"
+        android:gravity="center|top"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/breakfast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:text="Breakfast: "
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="113dp" />
+
+    <TextView
+        android:id="@+id/breakfastInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:text="Breakfast Info"
+        android:layout_toRightOf="@+id/breakfast"
+        android:layout_toEndOf="@+id/breakfast"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_alignBottom="@+id/breakfast" />
+
+    <TextView
+        android:id="@+id/lunch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lunch: "
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/breakfast"
+        android:layout_alignStart="@+id/breakfast" />
+
+    <TextView
+        android:id="@+id/lunchInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lunch Info"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:layout_alignBaseline="@+id/lunch"
+        android:layout_alignBottom="@+id/lunch"
+        android:layout_alignLeft="@+id/breakfastInfo"
+        android:layout_alignStart="@+id/breakfastInfo" />
+
+    <TextView
+        android:id="@+id/dinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/setMealDate"
+        android:layout_alignLeft="@+id/lunch"
+        android:layout_alignStart="@+id/lunch"
+        android:layout_marginBottom="85dp"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:text="Dinner: " />
+
+    <TextView
+        android:id="@+id/dinnerInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/dinner"
+        android:layout_alignLeft="@+id/lunchInfo"
+        android:layout_alignStart="@+id/lunchInfo"
+        android:text="Dinner Info"
+        android:textSize="20sp"
+        android:textColor="#000000"/>
+
+
+</RelativeLayout>

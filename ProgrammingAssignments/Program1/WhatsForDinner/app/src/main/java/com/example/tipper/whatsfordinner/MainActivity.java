@@ -35,9 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageView addDishImage;
     private ImageView recipeImage;
     private ImageView groceriesImage;
+    private ImageView mealsImage;
     private TextView addDishText;
     private TextView recipeText;
     private TextView groceriesText;
+    private TextView mealsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +186,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //MEALS
+        mealsText = (TextView) findViewById(R.id.meals_textView);
+        mealsImage = (ImageView) findViewById(R.id.meals_imageView);
+
+        mealsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CalendarMealActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mealsImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CalendarMealActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
 

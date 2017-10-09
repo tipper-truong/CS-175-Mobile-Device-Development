@@ -98,7 +98,7 @@ public class RecipeDetailFragment extends Fragment {
                 // Else: it's a drawable resource ID or from GalleryView
                 GalleryImageAdapter galleryImageAdapter= new GalleryImageAdapter(rootView.getContext());
 
-                if (!imagePath.equals("2130837599")) { //default image id
+                if (!imagePath.equals("2130837601")) { //default image id
                     recipeImage.setImageResource(galleryImageAdapter.mImageIds[Integer.parseInt(imagePath)]);
                 } else  {
                     //else set default image

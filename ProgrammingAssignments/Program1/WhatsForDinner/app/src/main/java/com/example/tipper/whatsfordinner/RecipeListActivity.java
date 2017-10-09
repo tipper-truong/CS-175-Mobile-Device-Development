@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +126,7 @@ public class RecipeListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     String recipeName = holder.mRecipeNameView.getText().toString();
-
+                    int updateMeal = 0;
                     Meal meal;
                     try {
                         meal = db.getMeal(recipeName);
@@ -139,20 +140,24 @@ public class RecipeListActivity extends AppCompatActivity {
                         addMeal.setMealName(recipeName);
                         addMeal.setMealCount(1);
                         db.addMeal(addMeal);
-                        Toast toast = new Toast(v.getContext());
-                        toast.makeText(v.getContext(), "Added Meal successfully", Toast.LENGTH_SHORT);
+                        //Toast.makeText(v.getContext(), "Added Meal successfully", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(v.getContext(), addMeal.getMealName() + ": " + String.valueOf(addMeal.getMealCount()), Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                     } else {
                         // Meal does exist in Meal Table
                         int count = meal.getMealCount();
                         count+=1;
                         meal.setMealCount(count);
-                        int updateMeal = db.updateMeal(meal);
+                        updateMeal = db.updateMeal(meal);
                         if(updateMeal == 1) {
-                            Toast toast = new Toast(v.getContext());
-                            toast.makeText(v.getContext(), "Updated Meal Count successfully", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(v.getContext(), meal.getMealName() + ": " + String.valueOf(meal.getMealCount()), Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.TOP, 0, 0);
+                            toast.show();
                         } else {
-                            Toast toast = new Toast(v.getContext());
-                            toast.makeText(v.getContext(), "Updated Meal Count unsuccessfully", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(v.getContext(), "Updated Meal Count for" + ": " + meal.getMealName() + " unsuccessfully", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.TOP, 0, 0);
+                            toast.show();
                         }
 
                     }
@@ -168,6 +173,7 @@ public class RecipeListActivity extends AppCompatActivity {
                                 .replace(R.id.recipe_detail_container, fragment)
                                 .commit();
                     } else {
+
                         Context context = v.getContext();
                         Intent intent = new Intent(context, RecipeDetailActivity.class);
                         intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.recipeName);

@@ -21,7 +21,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/banner_text"
-        android:layout_centerInParent="true"
         android:padding="25sp"
-        />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/helpLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WhatsForDinner HelpLink"
+        android:textColor="#3366BB"
+        android:textColorLink="@color/colorPrimary"
+        android:layout_marginBottom="11dp"
+        android:layout_alignBottom="@+id/tv"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

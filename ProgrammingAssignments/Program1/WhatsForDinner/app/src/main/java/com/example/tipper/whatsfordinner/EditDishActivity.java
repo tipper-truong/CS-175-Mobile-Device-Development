@@ -111,7 +111,7 @@ public class EditDishActivity extends AppCompatActivity {
 
             Picasso.with(getApplicationContext()).load(recipe.getImagePath()).into(recipeImageView);
             urlConnection.disconnect(); //avoid any response leakage
-        } else if (recipe.getImagePath().equals(String.valueOf(R.drawable.meal_icon))){
+        } else if (recipe.getImagePath().equals(String.valueOf(2130837601))){
             recipeImageView.setImageResource(R.drawable.meal_icon);
         } else {
             // Local Image
@@ -269,6 +269,9 @@ public class EditDishActivity extends AppCompatActivity {
                             Toast toast = Toast.makeText(EditDishContext, "Updated recipe successfully", Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.TOP, 0, 0);
                             toast.show();
+
+                            Intent intent = new Intent(getApplicationContext(), RecipeListActivity.class);
+                            startActivity(intent);
                         }
                     } else {
                         recipeAdded = db.updateRecipe(recipe);
@@ -278,6 +281,9 @@ public class EditDishActivity extends AppCompatActivity {
                             Toast toast = Toast.makeText(EditDishContext, "Updated recipe successfully", Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.TOP, 0, 0);
                             toast.show();
+
+                            Intent intent = new Intent(getApplicationContext(), RecipeListActivity.class);
+                            startActivity(intent);
                         }
 
                     }
